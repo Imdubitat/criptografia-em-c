@@ -1,3 +1,11 @@
+/******************************************************************************
+
+                            Online C Compiler.
+                Code, Compile, Run and Debug C program online.
+Write your code in this editor and press "Run" button to compile and execute it.
+
+*******************************************************************************/
+
 #include<stdio.h>
 #include<string.h>
 
@@ -26,7 +34,17 @@ int main() {
         fgets(chave, sizeof(chave), stdin);
         chave[strcspn(chave, "\n")] = '\0';
 
-        //lógica para fazer a criptografia e exibir a mensagem criptografada
+        int i;
+        for (i = 0; i < strlen(mensagem); i++) {
+            resultado[i] = mensagem[i] ^ chave[i % strlen(chave)];
+        }
+        resultado[i] = '\0'; // finaliza a string resultante
+
+        printf("Mensagem criptografada (em hexadecimal): ");
+        for (i = 0; i < strlen(mensagem); i++) {
+            printf("%02X", (unsigned char)resultado[i]);
+        }
+        printf("\n");
 
     } else if (opcao == 2) { //opcao para realizar descriptografia
         printf("Digite a mensagem criptografada (hexadecimal): ");
