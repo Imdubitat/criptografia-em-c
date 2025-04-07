@@ -1,13 +1,6 @@
-/******************************************************************************
-
-                            Online C Compiler.
-                Code, Compile, Run and Debug C program online.
-Write your code in this editor and press "Run" button to compile and execute it.
-
-*******************************************************************************/
-
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h> // para strtol
 
 int main() {
     char mensagem[256];
@@ -25,7 +18,7 @@ int main() {
     scanf("%d", &opcao);
     getchar(); // limpa o \n do buffer
 
-    if (opcao == 1) { //opcao para realizar criptografia
+    if (opcao == 1) { // Criptografia
         printf("Digite a mensagem: ");
         fgets(mensagem, sizeof(mensagem), stdin);
         mensagem[strcspn(mensagem, "\n")] = '\0';
@@ -38,7 +31,7 @@ int main() {
         for (i = 0; i < strlen(mensagem); i++) {
             resultado[i] = mensagem[i] ^ chave[i % strlen(chave)];
         }
-        resultado[i] = '\0'; // finaliza a string resultante
+        resultado[i] = '\0';
 
         printf("Mensagem criptografada (em hexadecimal): ");
         for (i = 0; i < strlen(mensagem); i++) {
@@ -46,7 +39,7 @@ int main() {
         }
         printf("\n");
 
-    } else if (opcao == 2) { //opcao para realizar descriptografia
+    } else if (opcao == 2) { // Descriptografia
         printf("Digite a mensagem criptografada (hexadecimal): ");
         fgets(entrada_hex, sizeof(entrada_hex), stdin);
         entrada_hex[strcspn(entrada_hex, "\n")] = '\0';
@@ -55,7 +48,28 @@ int main() {
         fgets(chave, sizeof(chave), stdin);
         chave[strcspn(chave, "\n")] = '\0';
 
-        //lógica para fazer a descriptografia e exibir a mensagem descriptografada
+        int len = strlen(entrada_hex);
+        if (len % 2 != 0) {
+            printf("Erro: entrada hexadecimal inválida.\n");
+            return 1;
+        }
+
+        int num_bytes = len / 2;
+        for (int i = 0; i < num_bytes; i++) {
+            char byte_hex[3];
+            byte_hex[0] = entrada_hex[2 * i];
+            byte_hex[1] = entrada_hex[2 * i + 1];
+            byte_hex[2] = '\0';
+
+            // Converte de hexadecimal para inteiro
+            int valor = (int)strtol(byte_hex, NULL, 16);
+
+            // Aplica XOR com a chave
+            bytes_convertidos[i] = (char)(valor ^ chave[i % strlen(chave)]);
+        }
+        bytes_convertidos[num_bytes] = '\0';
+
+        printf("Mensagem descriptografada: %s\n", bytes_convertidos);
 
     } else {
         printf("Opcao invalida. Encerrando programa.\n");
